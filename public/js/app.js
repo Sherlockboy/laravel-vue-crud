@@ -2089,23 +2089,76 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      posts: {}
+      posts: {},
+      categories: {},
+      category_id: "",
+      sort_field: "created_at",
+      sort_direction: "desc"
     };
   },
   mounted: function mounted() {
     this.getResults();
+    this.getCategories();
+  },
+  watch: {
+    category_id: function category_id(val) {
+      this.getResults();
+    }
   },
   methods: {
     getResults: function getResults() {
       var _this = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      axios.get('/api/posts?page=' + page).then(function (response) {
+      axios.get("\n                /api/posts?page=".concat(page, "\n                &category_id=").concat(this.category_id, "\n                &sort_field=").concat(this.sort_field, "\n                &sort_direction=").concat(this.sort_direction, "\n            ")).then(function (response) {
         _this.posts = response.data;
       });
+    },
+    getCategories: function getCategories() {
+      var _this2 = this;
+
+      axios.get('/api/categories').then(function (response) {
+        _this2.categories = response.data.data;
+      });
+    },
+    changeSort: function changeSort(field) {
+      if (this.sort_field === field) {
+        this.sort_direction = this.sort_direction === "asc" ? "desc" : "asc";
+      } else {
+        this.sort_field = field;
+        this.sort_direction = "asc";
+      }
+
+      this.getResults();
     }
   }
 });
@@ -20264,10 +20317,147 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "container" },
+    { staticClass: "container mt-5" },
     [
+      _c("div", { staticClass: "col-md-3" }, [
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.category_id,
+                expression: "category_id",
+              },
+            ],
+            staticClass: "form-control",
+            attrs: { id: "category" },
+            on: {
+              change: function ($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function (o) {
+                    return o.selected
+                  })
+                  .map(function (o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.category_id = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              },
+            },
+          },
+          [
+            _c("option", { attrs: { value: "" } }, [
+              _vm._v("-- choose category --"),
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.categories, function (category) {
+              return _c("option", { domProps: { value: category.id } }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(category.name) +
+                    "\n            "
+                ),
+              ])
+            }),
+          ],
+          2
+        ),
+      ]),
+      _vm._v(" "),
       _c("table", { staticClass: "table" }, [
-        _vm._m(0),
+        _c("thead", [
+          _c("tr", [
+            _c("th", [
+              _c(
+                "a",
+                {
+                  attrs: { href: "#" },
+                  on: {
+                    click: function ($event) {
+                      $event.preventDefault()
+                      return _vm.changeSort("title")
+                    },
+                  },
+                },
+                [_vm._v("Title")]
+              ),
+              _vm._v(" "),
+              _vm.sort_field === "title"
+                ? _c("span", [
+                    _vm.sort_direction === "asc"
+                      ? _c("span", [_vm._v("↑")])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.sort_direction === "desc"
+                      ? _c("span", [_vm._v("↓")])
+                      : _vm._e(),
+                  ])
+                : _vm._e(),
+            ]),
+            _vm._v(" "),
+            _c("th", [
+              _c(
+                "a",
+                {
+                  attrs: { href: "#" },
+                  on: {
+                    click: function ($event) {
+                      $event.preventDefault()
+                      return _vm.changeSort("text")
+                    },
+                  },
+                },
+                [_vm._v("Text")]
+              ),
+              _vm._v(" "),
+              _vm.sort_field === "text"
+                ? _c("span", [
+                    _vm.sort_direction === "asc"
+                      ? _c("span", [_vm._v("↑")])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.sort_direction === "desc"
+                      ? _c("span", [_vm._v("↓")])
+                      : _vm._e(),
+                  ])
+                : _vm._e(),
+            ]),
+            _vm._v(" "),
+            _c("th", [
+              _c(
+                "a",
+                {
+                  attrs: { href: "#" },
+                  on: {
+                    click: function ($event) {
+                      $event.preventDefault()
+                      return _vm.changeSort("created_at")
+                    },
+                  },
+                },
+                [_vm._v("Created Date")]
+              ),
+              _vm._v(" "),
+              _vm.sort_field === "created_at"
+                ? _c("span", [
+                    _vm.sort_direction === "asc"
+                      ? _c("span", [_vm._v("↑")])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.sort_direction === "desc"
+                      ? _c("span", [_vm._v("↓")])
+                      : _vm._e(),
+                  ])
+                : _vm._e(),
+            ]),
+            _vm._v(" "),
+            _c("th", [_vm._v("Action")]),
+          ]),
+        ]),
         _vm._v(" "),
         _c(
           "tbody",
@@ -20294,24 +20484,7 @@ var render = function () {
     1
   )
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Title")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Post Text")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Created Date")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Action")]),
-      ]),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
