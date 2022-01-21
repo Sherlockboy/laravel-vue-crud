@@ -10,12 +10,10 @@ class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return PostResource::collection(Post::all());
+        return PostResource::collection(Post::paginate(10));
     }
 
     /**
