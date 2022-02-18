@@ -2115,6 +2115,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2146,7 +2153,7 @@ __webpack_require__.r(__webpack_exports__);
     getCategories: function getCategories() {
       var _this2 = this;
 
-      axios.get('/api/categories').then(function (response) {
+      axios.get("/api/categories").then(function (response) {
         _this2.categories = response.data.data;
       });
     },
@@ -20317,7 +20324,7 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "container mt-5" },
+    { staticClass: "container card p-3 mt-5" },
     [
       _c("div", { staticClass: "col-md-3" }, [
         _c(
